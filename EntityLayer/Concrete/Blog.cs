@@ -17,5 +17,11 @@ namespace EntityLayer.Concrete
         public string BlogImage { get; set; }
         public DateTime CreateDate { get; set; }
         public bool BlogStatus { get; set; }
+        // Tablolar arası ikişki
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+        public List<Comment> Comments { get; set; }
+
+
     }
 }
