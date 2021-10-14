@@ -16,6 +16,7 @@ namespace EntityLayer.Concrete
         public string WiterImage { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string WriterPasswordAgain { get; set; }
         public bool Status { get; set; }
 
         //İlişkiler

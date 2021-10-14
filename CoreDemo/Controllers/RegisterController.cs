@@ -18,23 +18,27 @@ namespace CoreDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Writer writer)
+        public IActionResult Index(Writer writer, string writerPasswordAgain)
         {
             WriterValidator writerValidator = new WriterValidator();
             ValidationResult validationResult = writerValidator.Validate(writer);
-            if (validationResult.IsValid)
+            if (validationResult.IsValid && writer.WriterPasswordAgain == writerPasswordAgain)
             {
                 writer.Status = true;
                 writer.WriterAbout = "Deneme";
                 writerManager.Add(writer);
                 return RedirectToAction("Index", "Blog");
             }
-            else
+            else if (!validationResult.IsValid)
             {
                 foreach (var item in validationResult.Errors)
                 {
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
+            }
+            else
+            {
+                ModelState.AddModelError("WriterPassword", "Şifreler Eşleşmedi Lütfen Tekrar Deneyin!");
             }
             return View();
         }
