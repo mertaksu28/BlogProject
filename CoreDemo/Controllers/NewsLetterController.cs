@@ -14,17 +14,17 @@ namespace CoreDemo.Controllers
         NewsLetterManager newsLetterManager = new NewsLetterManager(new EfNewsLetterRepository());
 
         [HttpGet]
-        public PartialViewResult SubscribeMail()
+        public IActionResult SubscribeMail()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
-        public PartialViewResult SubscribeMail(NewsLetter newsLetter)
+        public IActionResult SubscribeMail(NewsLetter newsLetter)
         {
             newsLetter.MailStatus = true;
             newsLetterManager.Add(newsLetter);
-            return PartialView();
+            return RedirectToAction("Index", "Blog");
         }
     }
 }
