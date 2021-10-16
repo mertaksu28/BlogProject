@@ -15,13 +15,13 @@ namespace CoreDemo.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var values = aboutManager.GetAll();
+            return View(values);
         }
 
         public PartialViewResult SocialMediaAbout()
         {
-            var values = aboutManager.GetAll();
-            return PartialView(values);
+            return PartialView();
         }
     }
 }
