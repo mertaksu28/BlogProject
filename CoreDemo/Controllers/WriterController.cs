@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 
 namespace CoreDemo.Controllers
 {
-    public class LoginController : Controller
+    public class WriterController : Controller
     {
-        [AllowAnonymous]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult WriterProfile()
+        {
+            return View();
+        }
+
+        public IActionResult WriterMail()
         {
             return View();
         }
