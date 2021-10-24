@@ -10,5 +10,6 @@ namespace DataAccessLayer.Abstract
     public interface IBlogDal : IGenericRepositoryDal<Blog>
     {
         List<Blog> GetListWithCategory();
+        List<Blog> GetListWithCategoryBtWriter(int id);
     }
 }

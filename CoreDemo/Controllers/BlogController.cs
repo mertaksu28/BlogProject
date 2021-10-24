@@ -1,7 +1,11 @@
 ﻿using BusinessLayer.Concrete;
+using BusinessLayer.ValidationRules;
 using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +27,52 @@ namespace CoreDemo.Controllers
 
         public IActionResult BlogReadAll(int id)
         {
-            ViewBag.i = id; 
-            var values = blogManager.GetByBlogId(id);
+            ViewBag.i = id;
+            var values = blogManager.GetById(id);
             return View(values);
+        }
+
+        public IActionResult BlogListByWriter()
+        {
+            var values = blogManager.GetListWithCategoryByWriterBm(1);
+            return View(values);
+        }
+
+        [HttpGet]
+        public IActionResult BlogAdd()
+        {
+            CategoryManager categoryManager = new CategoryManager(new EfCategoryRepository());
+            List<SelectListItem> categoryValues = (from c in categoryManager.GetAll()
+                                                   select new SelectListItem
+                                                   {
+                                                       Text = c.CategoryName,
+                                                       Value = c.CategoryId.ToString()
+                                                   }).ToList();
+            ViewBag.controllerValue = categoryValues;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BlogAdd(Blog blog)
+        {
+            BlogValidator blogValidator = new BlogValidator();
+            ValidationResult validationResult = blogValidator.Validate(blog);
+            if (validationResult.IsValid)
+            {
+                blog.BlogStatus = true;
+                blog.CreateDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                blog.WriterId = 1;
+                blogManager.Add(blog);
+                return RedirectToAction("BlogListByWriter", "Blog");
+            }
+            else
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+            }
+            return View();
         }
 
     }
