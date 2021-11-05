@@ -22,7 +22,7 @@
     @Html.TextBoxFor(b => b.BlogImage, new { @class = "form-control" })
     <br />
     @Html.Label("Blog Kategori")
-    @Html.TextBoxFor(b => b.CategoryId, new { @class = "form-control" })
+    @Html.DropDownListFor(b => b.CategoryId, (List<SelectListItem>)ViewBag.controllerValue, new { @class = "form-control" })
     <br />
     @Html.Label("Blog İçeriği")
     @Html.TextAreaFor(b => b.BlogContent, 10, 3, new { @class = "form-control" })
