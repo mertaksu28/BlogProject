@@ -75,5 +75,25 @@ namespace CoreDemo.Controllers
             return View();
         }
 
+        public IActionResult DeleteBlog(int id)
+        {
+            var blogValue = blogManager.GetById(id);
+            blogManager.Delete(blogValue);
+            return RedirectToAction("BlogListByWriter");
+        }
+
+        [HttpGet]
+        public IActionResult EditBlog(int id)
+        {
+            var blogValue = blogManager.GetById(id);
+            return View(blogValue);
+        }
+
+        [HttpPost]
+        public IActionResult EditBlog(Blog blog)
+        {
+            return RedirectToAction("BlogListByWriter");
+        }
+
     }
 }
