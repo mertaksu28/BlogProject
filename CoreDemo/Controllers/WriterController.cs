@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BusinessLayer.Concrete;
+using BusinessLayer.ValidationRules;
+using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +14,8 @@ namespace CoreDemo.Controllers
 {
     public class WriterController : Controller
     {
+
+        WriterManager writerManager = new WriterManager(new EfWriterRepository());
 
         public IActionResult Index()
         {
@@ -36,10 +43,40 @@ namespace CoreDemo.Controllers
         {
             return PartialView();
         }
+
         [AllowAnonymous]
         public PartialViewResult WriterFooterPartial()
         {
             return PartialView();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult WriterEditProfile()
+        {
+            var writerValues = writerManager.GetById(1);
+            return View(writerValues);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult WriterEditProfile(Writer writer)
+        {
+            WriterValidator writerValidator = new WriterValidator();
+            ValidationResult validationResult = writerValidator.Validate(writer);
+            if (validationResult.IsValid)
+            {
+                writerManager.Update(writer);
+                return RedirectToAction("Index", "Dashboard");
+            }
+            else
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                }
+            }
+            return View();
         }
 
     }
