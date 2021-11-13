@@ -1,14 +1,13 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using CoreDemo.Models;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace CoreDemo.Controllers
 {
@@ -77,6 +76,39 @@ namespace CoreDemo.Controllers
                 }
             }
             return View();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult WriterAdd()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult WriterAdd(AddProfileImage profileImage)
+        {
+            Writer writer = new Writer();
+            if (profileImage.WiterImage != null)
+            {
+                var extension = Path.GetExtension(profileImage.WiterImage.FileName);//Girilen resim dosyasının dosya adı
+                var newImageName = Guid.NewGuid() + extension;
+                var saveToPlace = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/WriterImageFiles/", newImageName);
+                using (var stream = new FileStream(saveToPlace, FileMode.Create))
+                {
+                    profileImage.WiterImage.CopyTo(stream);
+                };
+                writer.WiterImage = newImageName;
+            }
+            writer.WriterName = profileImage.WriterName;
+            writer.WriterAbout = profileImage.WriterAbout;
+            writer.Email = profileImage.Email;
+            writer.Status = true;
+            writer.Password = profileImage.Password;
+
+            writerManager.Add(writer);
+            return RedirectToAction("Index", "Dashboard");
         }
 
     }
