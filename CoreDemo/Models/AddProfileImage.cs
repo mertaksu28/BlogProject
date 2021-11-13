@@ -11,7 +11,7 @@ namespace CoreDemo.Models
         public int WriterId { get; set; }
         public string WriterName { get; set; }
         public string WriterAbout { get; set; }
-        public IFormFile WiterImage { get; set; }
+        public IFormFile WiterImageFile { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string WriterPasswordAgain { get; set; }

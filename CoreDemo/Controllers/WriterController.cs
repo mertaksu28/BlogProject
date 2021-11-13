@@ -90,22 +90,24 @@ namespace CoreDemo.Controllers
         public IActionResult WriterAdd(AddProfileImage profileImage)
         {
             Writer writer = new Writer();
-            if (profileImage.WiterImage != null)
+            if (profileImage.WiterImageFile != null)
             {
-                var extension = Path.GetExtension(profileImage.WiterImage.FileName);//Girilen resim dosyasının dosya adı
+                var extension = Path.GetExtension(profileImage.WiterImageFile.FileName);//Girilen resim dosyasının dosya adı
                 var newImageName = Guid.NewGuid() + extension;
-                var saveToPlace = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/WriterImageFiles/", newImageName);
+                var saveToPlace = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/WriterImageFiles", newImageName);
                 using (var stream = new FileStream(saveToPlace, FileMode.Create))
                 {
-                    profileImage.WiterImage.CopyTo(stream);
+                    profileImage.WiterImageFile.CopyTo(stream);
                 };
                 writer.WiterImage = newImageName;
             }
+            writer.WriterId = profileImage.WriterId;
             writer.WriterName = profileImage.WriterName;
             writer.WriterAbout = profileImage.WriterAbout;
             writer.Email = profileImage.Email;
             writer.Status = true;
             writer.Password = profileImage.Password;
+            writer.WriterPasswordAgain = profileImage.WriterPasswordAgain;
 
             writerManager.Add(writer);
             return RedirectToAction("Index", "Dashboard");
