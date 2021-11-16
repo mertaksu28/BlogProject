@@ -25,15 +25,22 @@
                         <label for="exampleInputPassword4">Şifre</label>
                         @Html.PasswordFor(w => w.Password, new { @class = "form-control" })
                     </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword4">Şifreyi Onayla</label>
+                        @Html.PasswordFor(w => w.WriterPasswordAgain, new { @class = "form-control" })
+                    </div>
 
                     <div class="form-group">
-                        <label>Yazar Görseli</label>
                         <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                            <input type="text" class="form-control file-upload-info" disabled placeholder="Resim Dosyası Seç">
-                            <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-gradient-primary" type="button">Resim Seç</button>
-                            </span>
+                        @*<div class="input-group col-xs-12">
+                                <input type="text" class="form-control file-upload-info" disabled placeholder="Resim Dosyası Seç">
+                                <span class="input-group-append">
+                                    <button class="file-upload-browse btn btn-gradient-primary" type="button">Resim Seç</button>
+                                </span>
+                            </div>*@
+                        <div class="form-group">
+                            <label>Yazar Görseli</label>
+                            <input type="file" name="WiterImageFile" />
                         </div>
                     </div>
                     <div class="form-group">
